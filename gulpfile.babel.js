@@ -5,6 +5,7 @@ import runSequence from 'run-sequence';
 import path from 'path';
 import del from 'del';
 import webpack from 'webpack';
+import server from 'gulp-express';
 
 // Module Imports
 import * as paths from './paths';
@@ -53,4 +54,8 @@ gulp.task('webpack:watch', () => {
       })
     );
   });
+});
+
+gulp.task('express', () => {
+  server.run([path.join(paths.dist, 'server.pkgd.js')]);
 });

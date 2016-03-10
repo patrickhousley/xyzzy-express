@@ -11,7 +11,7 @@ let baseConfig = {
   output: {
     filename: '[name].pkgd.js',
     chunkFilename: '[name].[id].chunk.js',
-    path: paths.dist
+    path: path.join(paths.dist, 'scripts')
   },
   module: {
     preLoaders: [],

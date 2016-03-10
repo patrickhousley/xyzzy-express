@@ -4,8 +4,13 @@
   "description": "Remake of PretendYoureXyzzy repo using a mean stack.",
   "author": "",
   "license": "CC-BY-NC-SA-4.0",
+  "engines": {
+    "npm": "3.7.3",
+    "node": "5.8.0"
+  },
   "scripts": {
-    "prepublish": "./node_modules/.bin/typings install"
+    "postinstall": "./node_modules/.bin/typings install",
+    "prepublish": "./node_modules/.bin/gulp webpack:build"
   },
   "dependencies": {
     "babel": "^6.5.2",
@@ -13,22 +18,28 @@
     "body-parser": "^1.15.0",
     "debug": "^2.2.0",
     "del": "^2.2.0",
+    "express": "^4.13.4",
     "gulp": "^3.9.1",
     "gulp-babel": "^6.1.2",
     "gulp-express": "^0.3.5",
     "gulp-util": "^3.0.7",
-    "express": "^4.13.4",
+    "jade": "^1.11.0",
+    "karma": "^0.13.22",
     "lodash": "^4.5.1",
     "pg": "^4.5.1",
     "pg-hstore": "^2.3.2",
     "run-sequence": "^1.1.5",
     "sequelize": "^3.19.3",
-    "stats-webpack-plugin": "^0.3.1",
     "sqlite3": "^3.1.1",
+    "stats-webpack-plugin": "^0.3.1",
     "ts-loader": "^0.8.1",
     "typescript": "^1.8.7",
     "typings": "^0.7.7",
     "webpack": "^1.12.14",
     "webpack-node-externals": "^1.0.0"
+  },
+  "devDependencies": {
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0"
   }
 }
