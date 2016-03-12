@@ -1,4 +1,4 @@
-/// <reference path='./typings/main.d.ts' />
+
 
 import debug = require('debug');
 import express = require('express');
@@ -23,13 +23,6 @@ router.get('/', (req, res, next) => {
 });
 
 app.use('/api', router);
-
-
-// var renderIndex = (req: express.Request, res: express.Response) => {
-//     res.sendFile(path.resolve(__dirname, 'index.html'));
-// }
-//
-// app.get('/*', renderIndex);
 
 const server = app.listen(port, () => {
   logger('Express app loaded listening on port: %s', port);
