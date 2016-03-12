@@ -11,7 +11,7 @@ let baseConfig = {
   output: {
     filename: '[name].pkgd.js',
     chunkFilename: '[name].[id].chunk.js',
-    path: path.join(paths.dist, 'scripts')
+    path: paths.dist
   },
   module: {
     preLoaders: [],
@@ -22,7 +22,6 @@ let baseConfig = {
   },
   resolve: {
     modulesDirectories: [
-      paths.src,
       path.join(paths.root, 'node_modules')
     ],
     extensions: ['', '.ts', '.js', 'coffee', '.json']

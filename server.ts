@@ -1,4 +1,4 @@
-/// <reference path='../../typings/main.d.ts' />
+/// <reference path='./typings/main.d.ts' />
 
 import debug = require('debug');
 import express = require('express');

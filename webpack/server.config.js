@@ -17,7 +17,7 @@ config.target = 'node';
 config.externals = [nodeExternals()];
 
 config.entry = {
-  'server': [path.join(paths.serverSrc, 'server.ts')]
+  'server': [paths.serverEntrypoint]
 };
 
 export default function serverConfig(options = {}) {

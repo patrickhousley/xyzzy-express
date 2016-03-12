@@ -9,7 +9,6 @@
     "node": "5.8.0"
   },
   "scripts": {
-    "postinstall": "./node_modules/.bin/typings install",
     "prepublish": "./node_modules/.bin/gulp webpack:build"
   },
   "dependencies": {
@@ -25,11 +24,14 @@
     "gulp-util": "^3.0.7",
     "jade": "^1.11.0",
     "karma": "^0.13.22",
+    "karma-jasmine": "^0.3.7",
+    "karma-phantomjs-launcher": "^1.0.0",
     "lodash": "^4.5.1",
     "pg": "^4.5.1",
     "pg-hstore": "^2.3.2",
     "run-sequence": "^1.1.5",
     "sequelize": "^3.19.3",
+    "sequelize-cli": "^2.3.1",
     "sqlite3": "^3.1.1",
     "stats-webpack-plugin": "^0.3.1",
     "ts-loader": "^0.8.1",
@@ -37,9 +39,5 @@
     "typings": "^0.7.7",
     "webpack": "^1.12.14",
     "webpack-node-externals": "^1.0.0"
-  },
-  "devDependencies": {
-    "karma-jasmine": "^0.3.7",
-    "karma-phantomjs-launcher": "^1.0.0"
   }
 }

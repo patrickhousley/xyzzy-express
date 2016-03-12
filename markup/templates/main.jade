@@ -1,0 +1,24 @@
+include /helpers/shared-mixins
+
+doctype html
+html(lang=locale)
+  head
+
+    block meta
+      include /includes/meta
+
+    block headStyles
+      include /includes/headStyles
+
+    block headScripts
+      include /includes/headScripts
+  body
+
+    block header
+      include /includes/header
+
+    block mainContent
+      section.mainContent
+
+    block endScripts
+      include /includes/endScripts

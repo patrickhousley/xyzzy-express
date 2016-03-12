@@ -1,0 +1,16 @@
+block metaVars
+  //- These are default values that will be used for every page.  They can be overwritten by appending the metaVars block,
+  //- and setting the values to something else.
+  - var title = ''
+  - var description = 'Web based version of Card Against Humanity very similar to Pretend You're Xyzzy but using a partial mean stack.'
+  - var keywords = 'xyzzy, cards, against, humanity'
+
+- if (title && title.trim() != '')
+  title #{title.trim()} - Xyzzy-Mean
+- else
+  title Xyzzy-Mean
+
+meta(name="fragment", content="!")
+meta(name='description', content='#{description}')
+meta(name='keywords', content='#{keywords}')
+meta(name="viewport", content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')

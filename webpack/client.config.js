@@ -12,7 +12,7 @@ import * as paths from '../paths';
 let config = _.cloneDeep(baseConfig);
 
 config.entry = {
-  'client': [path.join(paths.clientSrc, 'app.ts')]
+  'client': [paths.clientEntrypoint]
 };
 
 export default function clientConfig(options = {}) {
