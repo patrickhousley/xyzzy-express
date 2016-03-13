@@ -6,6 +6,7 @@ import path from 'path';
 import del from 'del';
 import webpack from 'webpack';
 import server from 'gulp-express';
+import karma from 'karma';
 
 // Module Imports
 import * as paths from './paths';
@@ -59,3 +60,10 @@ gulp.task('webpack:watch', () => {
 gulp.task('express', () => {
   server.run([path.join(paths.dist, 'server.pkgd.js')]);
 });
+
+gulp.task('test', (cb) => {
+  new karma.Server({
+    configFile: path.join(paths.root, 'karma.conf.js'),
+    singleRun: true
+  }, cb).start();
+})
