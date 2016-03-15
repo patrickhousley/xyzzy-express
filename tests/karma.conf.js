@@ -2,10 +2,11 @@
   'use strict';
 
   var path = require('path');
-  var paths = require('./paths');
+  var paths = require('../paths');
 
   var babelPolyfills = path.join(paths.root, 'node_modules', 'babel-polyfill', 'dist', 'polyfill.js');
-  var testsPath = path.join(paths.root, 'tests', '**', '*.spec.js');
+  var testsPath = path.join(paths.serverTests, '**', '*.spec.js');
+  var modelsSrc = path.join(paths.root, 'models', '**', '*.js');
 
   module.exports = function(config) {
     config.set({
@@ -13,7 +14,7 @@
       basePath: paths.root,
       // frameworks to use
       // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-      frameworks: ['jasmine'],
+      frameworks: ['mocha', 'commonjs'],
       // test results reporter to use
       // possible values: 'dots', 'progress'
       // available reporters: https://npmjs.org/browse/keyword/karma-reporter
@@ -37,18 +38,16 @@
       plugins: [
         'karma-commonjs',
         'karma-babel-preprocessor',
-        'karma-jasmine',
         'karma-mocha',
-        'karma-webpack',
         'karma-coverage',
-        'karma-chrome-launcher',
         'karma-phantomjs-launcher'
       ],
 
       // list of files / patterns to load in the browser
       files: [
         babelPolyfills,
-        testsPath
+        testsPath,
+        modelsSrc
       ],
       // list of files to exclude
       exclude: [
@@ -56,7 +55,14 @@
       // preprocess matching files before serving them to the browser
       // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
       preprocessors: {
-        testsPath: ['babel']
+        [testsPath]: ['babel', 'commonjs'],
+        [modelsSrc]: ['babel', 'commonjs']
+      },
+      babelPreprocessor: {
+        options: {
+          presets: ['es2015'],
+          sourceMap: 'inline'
+        }
       }
     });
   };

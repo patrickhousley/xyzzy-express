@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
 
@@ -24,6 +25,7 @@ fs.readdirSync(__dirname)
   });
 
 Object.keys(db).forEach((modelName) => {
+  console.log(modelName);
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
@@ -32,4 +34,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export db;
+export default db;

@@ -1,11 +1,15 @@
 // Vendor Imports
 import gulp from 'gulp';
 import gutil from 'gulp-util';
+import filter from 'gulp-filter';
 import runSequence from 'run-sequence';
 import path from 'path';
 import del from 'del';
 import webpack from 'webpack';
 import server from 'gulp-express';
+import mocha from 'gulp-mocha';
+import istanbul from 'gulp-istanbul';
+import * as isparta from 'isparta';
 import karma from 'karma';
 
 // Module Imports
@@ -66,4 +70,51 @@ gulp.task('test', (cb) => {
     configFile: path.join(paths.root, 'karma.conf.js'),
     singleRun: true
   }, cb).start();
-})
+});
+
+/******************************************************************************
+* Server Testing Section
+*******************************************************************************/
+let serverSources = [
+  path.join(paths.root, 'models', '**', '*.js'),
+  path.join(paths.root, 'controllers', '**', '*.js')
+];
+let serverTestSources = [
+  path.join(paths.serverTests, '**', '*.js')
+];
+
+gulp.task('test:coverage:server', (cb) => {
+  runSequence('coverage:instrument:server', 'test:server', 'coverage:report:server', cb);
+});
+
+gulp.task('test:server', () => {
+  return gulp.src(serverTestSources)
+    .pipe(mocha());
+});
+
+gulp.task('coverage:instrument:server', () => {
+  return gulp.src(serverSources)
+  .pipe(istanbul({
+    instrumenter: isparta.Instrumenter,
+    includeUntested: true
+  }))
+  .pipe(istanbul.hookRequire());
+});
+
+gulp.task('coverage:report:server', () => {
+  return gulp.src(serverSources)
+  .pipe(istanbul.writeReports({
+    dir: path.join(paths.dist, 'coverage', 'server'),
+    reporters: ['html', 'lcov', 'json', 'text', 'text-summary']
+  }));
+});
+
+
+/******************************************************************************
+* Gulp Watch Section
+*******************************************************************************/
+
+gulp.task('tdd:server', () => {
+  gulp.watch([].concat(serverSources).concat(serverTestSources), ['test:coverage:server'])
+  .on('error', gutil.log);
+});
