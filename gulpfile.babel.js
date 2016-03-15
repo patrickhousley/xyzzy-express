@@ -18,16 +18,25 @@ import serverConfig from './webpack/server.config';
 import clientConfig from './webpack/client.config';
 
 gulp.task('default', ['clean:dist'], (callback) => {
-
+  runSequence(
+    ['watch', 'webpack:watch']
+  );
 });
 
 gulp.task('build', ['clean:dist'], (callback) => {
-
+  runSequence(
+    ['test:coverage:server'],
+    ['webpack:build']
+  );
 });
 
 gulp.task('clean:dist', (callback) => {
   return del(paths.dist);
 });
+
+/******************************************************************************
+* Webpack Section
+*******************************************************************************/
 
 gulp.task('webpack:build', (callback) => {
   let compiler = webpack([serverConfig(), clientConfig()]);
@@ -59,17 +68,6 @@ gulp.task('webpack:watch', () => {
       })
     );
   });
-});
-
-gulp.task('express', () => {
-  server.run([path.join(paths.dist, 'server.pkgd.js')]);
-});
-
-gulp.task('test', (cb) => {
-  new karma.Server({
-    configFile: path.join(paths.root, 'karma.conf.js'),
-    singleRun: true
-  }, cb).start();
 });
 
 /******************************************************************************
@@ -111,8 +109,18 @@ gulp.task('coverage:report:server', () => {
 
 
 /******************************************************************************
-* Gulp Watch Section
+* Gulp Watch/Server Section
 *******************************************************************************/
+
+gulp.task('express', () => {
+  server.run([path.join(paths.dist, 'bin', 'server.pkgd.js')]);
+});
+
+gulp.task('watch', () => {
+  runSequence('express', [
+    'tdd:server'
+  ]);
+});
 
 gulp.task('tdd:server', () => {
   gulp.watch([].concat(serverSources).concat(serverTestSources), ['test:coverage:server'])
