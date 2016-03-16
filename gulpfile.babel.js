@@ -14,8 +14,7 @@ import karma from 'karma';
 
 // Module Imports
 import * as paths from './paths';
-import serverConfig from './webpack/server.config';
-import clientConfig from './webpack/client.config';
+import webpackConfig from './webpack.config';
 
 gulp.task('default', ['clean:dist'], (callback) => {
   runSequence(
@@ -38,8 +37,8 @@ gulp.task('clean:dist', (callback) => {
 * Webpack Section
 *******************************************************************************/
 
-gulp.task('webpack:build', (callback) => {
-  let compiler = webpack([serverConfig(), clientConfig()]);
+gulp.task('webpack:build', (cb) => {
+  let compiler = webpack([webpackConfig]);
   compiler.run((err, stats) => {
     gutil.log(
       stats.toString({
@@ -49,7 +48,7 @@ gulp.task('webpack:build', (callback) => {
       })
     );
 
-    callback();
+    cb();
   });
 });
 
@@ -107,19 +106,28 @@ gulp.task('coverage:report:server', () => {
   }));
 });
 
-
 /******************************************************************************
-* Gulp Watch/Server Section
+* Express Server Section
 *******************************************************************************/
 
 gulp.task('express', () => {
   server.run([path.join(paths.dist, 'bin', 'server.pkgd.js')]);
 });
 
+/******************************************************************************
+* Gulp Watch Section
+*******************************************************************************/
+
 gulp.task('watch', () => {
-  runSequence('express', [
-    'tdd:server'
-  ]);
+  runSequence(
+    [
+      'express',
+      'webpack:watch'
+    ],
+    [
+      'tdd:server'
+    ]
+  );
 });
 
 gulp.task('tdd:server', () => {

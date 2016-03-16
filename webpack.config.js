@@ -4,10 +4,13 @@ import webpack from 'webpack';
 import StatsPlugin from 'stats-webpack-plugin';
 
 // Module Imports
-import * as paths from '../paths';
+import * as paths from './paths';
 
-let baseConfig = {
+let webpackConfig = {
   profile: true,
+  entry: {
+    'client': [paths.clientEntrypoint]
+  },
   output: {
     filename: '[name].pkgd.js',
     chunkFilename: '[name].[id].chunk.js',
@@ -35,8 +38,8 @@ let baseConfig = {
 };
 
 if (process.env.NODE_ENV ==='production') {
-  baseConfig.devtool = 'cheap-source-map';
-  baseConfig.plugins.push(
+  webpackConfig.devtool = 'cheap-source-map';
+  webpackConfig.plugins.push(
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       mangle: {
@@ -48,7 +51,7 @@ if (process.env.NODE_ENV ==='production') {
     })
   );
 } else {
-  baseConfig.devtool = 'eval';
+  webpackConfig.devtool = 'eval';
 }
 
-export default baseConfig;
+export default webpackConfig;
