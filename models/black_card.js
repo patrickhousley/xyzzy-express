@@ -24,6 +24,9 @@ export default function(sequelize, DataTypes) {
     }
   }, {
     tableName: 'black_cards',
+    timestamps: false,
+    underscored: true,
+    freezeTableName: true,
     associate: (models) => {
 
     }
