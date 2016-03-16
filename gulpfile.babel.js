@@ -16,17 +16,26 @@ import karma from 'karma';
 import * as paths from './paths';
 import webpackConfig from './webpack.config';
 
-gulp.task('default', ['clean:dist'], (callback) => {
+/******************************************************************************
+* Common and Default Section
+*******************************************************************************/
+
+gulp.task('default', ['clean:dist'], () => {
   runSequence(
     ['watch', 'webpack:watch']
   );
 });
 
-gulp.task('build', ['clean:dist'], (callback) => {
+gulp.task('build', ['clean:dist'], (cb) => {
   runSequence(
     ['test:coverage:server'],
-    ['webpack:build']
+    ['webpack:build'],
+    cb
   );
+});
+
+gulp.task('test', ['clean:dist'], (cb) => {
+  runSequence('test:coverage:server', cb);
 });
 
 gulp.task('clean:dist', (callback) => {
