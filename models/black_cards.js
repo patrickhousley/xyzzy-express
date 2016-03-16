@@ -19,7 +19,7 @@ export default function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       defaultValue: 1
     },
-    text: {
+    watermark: {
       type: DataTypes.STRING(5)
     }
   }, {
@@ -28,7 +28,10 @@ export default function(sequelize, DataTypes) {
     underscored: true,
     freezeTableName: true,
     associate: (models) => {
-
+      models.BlackCard.belongsToMany(models.CardSet, {
+        through: models.CardSetBlackCard,
+        as: { singular: 'black_card_id', plural: 'black_card_id' }
+      });
     }
   });
 };
