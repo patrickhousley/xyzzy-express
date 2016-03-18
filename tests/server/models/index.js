@@ -6,8 +6,7 @@ describe('Database', () => {
   let db = database({ env: 'test' })
 
   it('should contain environment', () => {
-    expect(db.env).to.not.be.null;
-    expect(db.env).to.not.be.undefined;
+    expect(db.env).to.exist;
   });
 
   it('should be test environment', () => {
@@ -15,8 +14,7 @@ describe('Database', () => {
   });
 
   it('should contain config', () => {
-    expect(db.config).to.not.be.null;
-    expect(db.config).to.not.be.undefined;
+    expect(db.config).to.exist;
   });
 
   it('should contain test config', () => {
@@ -24,19 +22,16 @@ describe('Database', () => {
   });
 
   it('should contain reference to sequelize', () => {
-    expect(db.sequelize).to.not.be.null;
-    expect(db.sequelize).to.not.be.undefined;
-    expect(db.Sequelize).to.not.be.null;
-    expect(db.Sequelize).to.not.be.undefined;
+    expect(db.sequelize).to.exist;
   });
 
   it('should be capable of syncing', (cb) => {
     db.sequelize.sync({ logging: false }).then((res) => {
-      expect(res).to.not.be.null;
+      expect(res).to.exist;
       cb();
     }).catch((err) => {
       cb(err);
-    })
+    });
   });
 
 });

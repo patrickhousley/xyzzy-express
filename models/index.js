@@ -18,6 +18,7 @@ export default function (options) {
   .filter((file) => {
     return file.indexOf('.') !== 0 &&
     file !== path.basename(__filename) &&
+    file !== 'shared_validators.js' &&
     file.slice(-3) === '.js';
   })
   .forEach((file) => {

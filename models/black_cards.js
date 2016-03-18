@@ -1,4 +1,6 @@
 import Sequelize from 'sequelize';
+import R from 'ramda';
+import {arrayify, restrictId} from './shared_validators';
 
 export default function(sequelize, DataTypes) {
   return sequelize.define('BlackCard', {
@@ -32,6 +34,9 @@ export default function(sequelize, DataTypes) {
         through: models.CardSetBlackCard,
         as: { singular: 'black_card_id', plural: 'black_card_id' }
       });
+    },
+    hooks: {
+      beforeValidate: R.pipe( arrayify(sequelize), restrictId )
     }
   });
 };

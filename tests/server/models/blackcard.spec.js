@@ -6,9 +6,9 @@ describe('BlackCard Model', () => {
   let db = database({ env: 'test' })
 
   it('should exist on the db object', () => {
-    expect(db).to.not.be.null;
-    expect(db['BlackCard']).to.not.be.null;
-    expect(db.BlackCard).to.not.be.null;
+    expect(db).to.exist;
+    expect(db['BlackCard']).to.exist;
+    expect(db.BlackCard).to.exist;
   });
 
   describe('Insert', () => {
@@ -37,15 +37,48 @@ describe('BlackCard Model', () => {
         text: 'test',
         card_set: cardSet
       }, { logging: false }).then((blackCard) => {
-        expect(blackCard).to.not.be.null;
-        expect(blackCard.id).to.equal(1);
+        expect(blackCard).to.exist;
+        expect(blackCard.id).to.be.above(0);
         expect(blackCard.text).to.equal('test');
         expect(blackCard.draw).to.equal(0);
         expect(blackCard.pick).to.equal(1);
-        expect(blackCard.watermark).to.be.undefined;
+        expect(blackCard.watermark).to.not.exist;
         cb();
       }).catch((err) => {
         cb(err);
+      });
+    });
+
+    it('should be capable of inserting with all attributes except id', (cb) => {
+      db.BlackCard.create({
+        text: 'test',
+        draw: 1,
+        pick: 0,
+        watermark: 'mark',
+        card_set: cardSet
+      }, { logging: false }).then((blackCard) => {
+        expect(blackCard).to.exist;
+        expect(blackCard.id).to.be.above(0);
+        expect(blackCard.text).to.equal('test');
+        expect(blackCard.draw).to.equal(1);
+        expect(blackCard.pick).to.equal(0);
+        expect(blackCard.watermark).to.equal('mark');
+        cb();
+      }).catch((err) => {
+        cb(err);
+      });
+    });
+
+    it('should not allow insert with id', (cb) => {
+      db.BlackCard.create({
+        id: 9999999,
+        text: 'test',
+        card_set: cardSet
+      }, { logging: false }).then((blackCard) => {
+        cb(new Error('Database create promise was resolved incorrectly.'));
+      }).catch((err) => {
+        expect(err).to.exist;
+        cb();
       });
     });
 
