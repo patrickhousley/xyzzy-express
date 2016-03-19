@@ -7,22 +7,44 @@ export default function(sequelize, DataTypes) {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
-      autoIncrement: true
+      autoIncrement: true,
+      validate: {
+        /**
+         * Some databases do not allow inserting a value for autoincrement fields
+         * such as Oracle.
+         */
+        isNull: true
+      }
     },
     text: {
       type: DataTypes.STRING(255),
-      allowNull: false
+      allowNull: false,
+      validate: {
+        len: [1, 255],
+        notEmpty: true
+      }
     },
     draw: {
       type: DataTypes.INTEGER,
-      defaultValue: 0
+      defaultValue: 0,
+      validate: {
+        min: 0,
+        isNumeric: true
+      }
     },
     pick: {
       type: DataTypes.INTEGER,
-      defaultValue: 1
+      defaultValue: 1,
+      validate: {
+        min: 0,
+        isNumeric: true
+      }
     },
     watermark: {
-      type: DataTypes.STRING(5)
+      type: DataTypes.STRING(5),
+      validate: {
+        len: [0, 5]
+      }
     }
   }, {
     tableName: 'black_cards',
@@ -34,9 +56,6 @@ export default function(sequelize, DataTypes) {
         through: models.CardSetBlackCard,
         as: { singular: 'black_card_id', plural: 'black_card_id' }
       });
-    },
-    hooks: {
-      beforeValidate: R.pipe( arrayify(sequelize), restrictId )
     }
   });
 };

@@ -1,4 +1,5 @@
 import {expect} from 'chai';
+import R from 'ramda';
 import database from '../../../models/index';
 
 describe('BlackCard Model', () => {
@@ -73,6 +74,57 @@ describe('BlackCard Model', () => {
       db.BlackCard.create({
         id: 9999999,
         text: 'test',
+        card_set: cardSet
+      }, { logging: false }).then((blackCard) => {
+        cb(new Error('Database create promise was resolved incorrectly.'));
+      }).catch((err) => {
+        expect(err).to.exist;
+        cb();
+      });
+    });
+
+    it('should not allow more than 255 characters in text', (cb) => {
+      db.BlackCard.create({
+        text: R.repeat('a', 256).join(''),
+        card_set: cardSet
+      }, { logging: false }).then((blackCard) => {
+        cb(new Error('Database create promise was resolved incorrectly.'));
+      }).catch((err) => {
+        expect(err).to.exist;
+        cb();
+      });
+    });
+
+    it('should not allow negative number for draw', (cb) => {
+      db.BlackCard.create({
+        text: 'test',
+        draw: -1,
+        card_set: cardSet
+      }, { logging: false }).then((blackCard) => {
+        cb(new Error('Database create promise was resolved incorrectly.'));
+      }).catch((err) => {
+        expect(err).to.exist;
+        cb();
+      });
+    });
+
+    it('should not allow negative number for pick', (cb) => {
+      db.BlackCard.create({
+        text: 'test',
+        pick: -1,
+        card_set: cardSet
+      }, { logging: false }).then((blackCard) => {
+        cb(new Error('Database create promise was resolved incorrectly.'));
+      }).catch((err) => {
+        expect(err).to.exist;
+        cb();
+      });
+    });
+
+    it('should not allow more than 5 characters in watermark', (cb) => {
+      db.BlackCard.create({
+        text: 'test',
+        watermark: R.repeat('a', 6).join(''),
         card_set: cardSet
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
