@@ -5,23 +5,13 @@ import database from '../../../models/index';
 describe('BlackCard Model', () => {
 
   let db = database({ env: 'test' });
-  let cardSet;
 
   before((cb) => {
-    db.sequelize.sync({ force: true, logging: false }).then(() => {
-      db.CardSet.create({
-        active: true,
-        name: 'test',
-        base_deck: true,
-        description: 'test'
-      }, { logging: false }).then((res) => {
-        cardSet = res;
-        cb();
-      }).catch((err) => {
-        cb(new Error(err));
-      });
+    db.sequelize.sync({ logging: true }).then((res) => {
+      expect(res).to.exist;
+      cb();
     }).catch((err) => {
-      cb(new Error(err));
+      cb(err);
     });
   });
 
@@ -35,8 +25,7 @@ describe('BlackCard Model', () => {
 
     it('should be capable of inserting with minimal attributes', (cb) => {
       db.BlackCard.create({
-        text: 'test',
-        card_set: cardSet
+        text: 'test'
       }, { logging: false }).then((blackCard) => {
         expect(blackCard).to.exist;
         expect(blackCard.id).to.be.above(0);
@@ -55,8 +44,7 @@ describe('BlackCard Model', () => {
         text: 'test',
         draw: 1,
         pick: 0,
-        watermark: 'mark',
-        card_set: cardSet
+        watermark: 'mark'
       }, { logging: false }).then((blackCard) => {
         expect(blackCard).to.exist;
         expect(blackCard.id).to.be.above(0);
@@ -73,8 +61,7 @@ describe('BlackCard Model', () => {
     it('should not allow insert with id', (cb) => {
       db.BlackCard.create({
         id: 9999999,
-        text: 'test',
-        card_set: cardSet
+        text: 'test'
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -85,8 +72,7 @@ describe('BlackCard Model', () => {
 
     it('should not allow more than 255 characters in text', (cb) => {
       db.BlackCard.create({
-        text: R.repeat('a', 256).join(''),
-        card_set: cardSet
+        text: R.repeat('a', 256).join('')
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -98,8 +84,7 @@ describe('BlackCard Model', () => {
     it('should not allow negative number for draw', (cb) => {
       db.BlackCard.create({
         text: 'test',
-        draw: -1,
-        card_set: cardSet
+        draw: -1
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -111,8 +96,7 @@ describe('BlackCard Model', () => {
     it('should not allow negative number for pick', (cb) => {
       db.BlackCard.create({
         text: 'test',
-        pick: -1,
-        card_set: cardSet
+        pick: -1
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -124,8 +108,7 @@ describe('BlackCard Model', () => {
     it('should not allow more than 5 characters in watermark', (cb) => {
       db.BlackCard.create({
         text: 'test',
-        watermark: R.repeat('a', 6).join(''),
-        card_set: cardSet
+        watermark: R.repeat('a', 6).join('')
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -142,8 +125,7 @@ describe('BlackCard Model', () => {
 
     before((cb) => {
       db.BlackCard.create({
-        text: 'test',
-        card_set: cardSet
+        text: 'test'
       }, { logging: false }).then((res) => {
         blackCard = res;
         cb();
@@ -192,8 +174,7 @@ describe('BlackCard Model', () => {
 
     it('should not allow more than 255 characters in text', (cb) => {
       blackCard.update({
-        text: R.repeat('a', 256).join(''),
-        card_set: cardSet
+        text: R.repeat('a', 256).join('')
       }, { logging: false }).then((res) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -205,8 +186,7 @@ describe('BlackCard Model', () => {
     it('should not allow negative number for draw', (cb) => {
       blackCard.update({
         text: 'test',
-        draw: -1,
-        card_set: cardSet
+        draw: -1
       }, { logging: false }).then((res) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -218,8 +198,7 @@ describe('BlackCard Model', () => {
     it('should not allow negative number for pick', (cb) => {
       blackCard.update({
         text: 'test',
-        pick: -1,
-        card_set: cardSet
+        pick: -1
       }, { logging: false }).then((res) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -231,8 +210,7 @@ describe('BlackCard Model', () => {
     it('should not allow more than 5 characters in watermark', (cb) => {
       blackCard.update({
         text: 'test',
-        watermark: R.repeat('a', 6).join(''),
-        card_set: cardSet
+        watermark: R.repeat('a', 6).join('')
       }, { logging: false }).then((blackCard) => {
         cb(new Error('Database create promise was resolved incorrectly.'));
       }).catch((err) => {
@@ -259,8 +237,7 @@ describe('BlackCard Model', () => {
 
     before((cb) => {
       db.BlackCard.create({
-        text: 'test',
-        card_set: cardSet
+        text: 'test'
       }, { logging: false }).then((res) => {
         blackCard = res;
         cb();
@@ -297,8 +274,7 @@ describe('BlackCard Model', () => {
 
     before((cb) => {
       db.BlackCard.create({
-        text: 'test',
-        card_set: cardSet
+        text: 'test'
       }, { logging: false }).then((res) => {
         blackCard = res;
         cb();
@@ -326,6 +302,72 @@ describe('BlackCard Model', () => {
   });
 
   describe('CardSet Integration', () => {
+
+    let blackCard;
+    let cardSet;
+
+    before((cb) => {
+      db.BlackCard.create({
+        text: 'test'
+      }, { logging: false }).then((res) => {
+        blackCard = res;
+        cb();
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
+
+    before((cb) => {
+      db.sequelize.sync({ force: true, logging: false }).then(() => {
+        db.CardSet.create({
+          active: true,
+          name: 'test',
+          base_deck: true,
+          description: 'test'
+        }, { logging: false }).then((res) => {
+          cardSet = res;
+          cb();
+        }).catch((err) => {
+          cb(new Error(err));
+        });
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
+
+    it('should be capable of creating black card with card set', (cb) => {
+      db.BlackCard.create({
+        text: 'test2',
+        cardSets: [cardSet]
+      }, { logging: false, }).then((res) => {
+        expect(res).to.exist;
+        expect(res.text).to.equal('test2');
+
+        res.getCardSet().then((csRes) => {
+          expect(csRes).to.exist;
+          expect(csRes.id).to.equal(cardSet.id);
+        });
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
+
+    it('should be capable of associate card set with black card', (cb) => {
+      blackCard.addCardSet(cardSet).then((res) => {
+        console.log(res);
+        cb();
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
+
+    it('should be capable of retrieving the card set associated with the black card', (cb) => {
+      blackCard.getCardSets().then((res) => {
+        console.log(res);
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
 
   });
 

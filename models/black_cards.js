@@ -53,8 +53,9 @@ export default function(sequelize, DataTypes) {
     freezeTableName: true,
     associate: (models) => {
       models.BlackCard.belongsToMany(models.CardSet, {
-        through: models.CardSetBlackCard,
-        as: { singular: 'black_card_id', plural: 'black_card_id' }
+        through: 'card_set_black_card',
+        as: 'cardSets',
+        foreignKey: 'black_card_id'
       });
     }
   });

@@ -31,13 +31,15 @@ export default function(sequelize, DataTypes) {
     underscored: true,
     freezeTableName: true,
     associate: (models) => {
-      models.BlackCard.belongsToMany(models.CardSet, {
-        through: models.CardSetBlackCard,
-        as: { singular: 'card_set_id', plural: 'card_set_id' }
+      models.CardSet.belongsToMany(models.BlackCard, {
+        through: 'card_set_black_card',
+        as: 'blackCards',
+        foreignKey: 'card_set_id'
       });
-      models.WhiteCard.belongsToMany(models.CardSet, {
-        through: models.CardSetWhiteCard,
-        as: { singular: 'card_set_id', plural: 'card_set_id' }
+      models.CardSet.belongsToMany(models.WhiteCard, {
+        through: 'card_set_white_card',
+        as: 'whiteCards',
+        foreignKey: 'card_set_id'
       });
     }
   });
