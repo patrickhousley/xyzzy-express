@@ -4,10 +4,12 @@ export default function(sequelize, DataTypes) {
   return sequelize.define('CardSetBlackCard', {
     card_set_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false
     },
     black_card_id: {
       type: DataTypes.INTEGER,
+      primaryKey: true,
       allowNull: false
     }
   }, {

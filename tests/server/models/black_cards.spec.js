@@ -7,7 +7,7 @@ describe('BlackCard Model', () => {
   let db = database({ env: 'test' });
 
   before((cb) => {
-    db.sequelize.sync({ logging: true }).then((res) => {
+    db.sequelize.sync({ force: true, logging: false }).then((res) => {
       expect(res).to.exist;
       cb();
     }).catch((err) => {

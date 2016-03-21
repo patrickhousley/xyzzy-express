@@ -21,9 +21,15 @@ export default function(sequelize, DataTypes) {
     freezeTableName: true,
     associate: (models) => {
       models.WhiteCard.belongsToMany(models.CardSet, {
-        through: 'card_set_white_card',
+        through: models.CardSetWhiteCard,
         as: 'cardSets',
-        foreignKey: 'white_card_id'
+        foreignKey: {
+          name: 'white_card_id',
+          allowNull: false,
+          validate: {
+            notEmpty: true
+          }
+        }
       });
     }
   });
