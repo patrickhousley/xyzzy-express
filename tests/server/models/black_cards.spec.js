@@ -318,14 +318,41 @@ describe('BlackCard Model', () => {
     });
 
     before((cb) => {
-      db.sequelize.sync({ force: true, logging: false }).then(() => {
-        db.CardSet.create({
-          active: true,
-          name: 'test',
-          base_deck: true,
-          description: 'test'
-        }, { logging: false }).then((res) => {
-          cardSet = res;
+      db.CardSet.create({
+        active: true,
+        name: 'test',
+        base_deck: true,
+        description: 'test'
+      }, { logging: false }).then((res) => {
+        cardSet = res;
+        cb();
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
+
+    /**
+     * It does not appear as if sequelize supports passing an alreadu existing database entry
+     * into the create process of an associated model. Instead, both models would have to be
+     * created at the same time. See below URL for more info.
+     *
+     * https://github.com/sequelize/sequelize/issues/3807
+     */
+    xit('should be capable of creating black card with card set', (cb) => {
+      db.BlackCard.create({
+        text: 'test2',
+        cardSets: [cardSet.id]
+      }, { include: [ { model: db.CardSet, as: 'cardSets' } ] }).then((res) => {
+        expect(res).to.exist;
+        expect(res.text).to.equal('test2');
+
+        res.getCardSets({  }).then((csRes) => {
+          expect(csRes).to.exist;
+          expect(csRes.length).to.be.above(0);
+
+          let csModel = csRes[0];
+          expect(csModel.id).to.equal(cardSet.id);
+
           cb();
         }).catch((err) => {
           cb(new Error(err));
@@ -335,35 +362,36 @@ describe('BlackCard Model', () => {
       });
     });
 
-    it('should be capable of creating black card with card set', (cb) => {
-      db.BlackCard.create({
-        text: 'test2',
-        cardSets: [cardSet]
-      }, { logging: false, }).then((res) => {
+    it('should be capable of associating with CardSet', (cb) => {
+      blackCard.addCardSet(cardSet, { logging: false }).then((res) => {
         expect(res).to.exist;
-        expect(res.text).to.equal('test2');
 
-        res.getCardSet().then((csRes) => {
+        blackCard.hasCardSet(cardSet, { logging: false }).then((hasRes) => {
+          expect(hasRes).to.equal(true);
+          cb();
+        }).catch((err) => {
+          cb(new Error(err));
+        })
+      }).catch((err) => {
+        cb(new Error(err));
+      });
+    });
+
+    it('should be capable of retrieving CardSet associations', (cb) => {
+      blackCard.addCardSet(cardSet, { logging: false }).then((res) => {
+        expect(res).to.exist;
+
+        blackCard.getCardSets({ logging: false }).then((csRes) => {
           expect(csRes).to.exist;
-          expect(csRes.id).to.equal(cardSet.id);
-        });
-      }).catch((err) => {
-        cb(new Error(err));
-      });
-    });
+          expect(csRes.length).to.be.above(0);
 
-    it('should be capable of associate card set with black card', (cb) => {
-      blackCard.addCardSet(cardSet).then((res) => {
-        console.log(res);
-        cb();
-      }).catch((err) => {
-        cb(new Error(err));
-      });
-    });
+          let cs = csRes[0];
+          expect(cs.id).to.equal(cardSet.id);
 
-    it('should be capable of retrieving the card set associated with the black card', (cb) => {
-      blackCard.getCardSets().then((res) => {
-        console.log(res);
+          cb();
+        }).catch((err) => {
+          cb(new Error(err));
+        })
       }).catch((err) => {
         cb(new Error(err));
       });
