@@ -3,7 +3,7 @@ import database from '../../../models/index';
 
 describe('Database', () => {
 
-  let db = database({ env: 'test' })
+  let db = database({ env: 'test' });
 
   it('should contain environment', () => {
     expect(db.env).to.exist;
