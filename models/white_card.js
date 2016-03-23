@@ -19,18 +19,20 @@ export default function(sequelize, DataTypes) {
     timestamps: false,
     underscored: true,
     freezeTableName: true,
-    associate: (models) => {
-      models.WhiteCard.belongsToMany(models.CardSet, {
-        through: models.CardSetWhiteCard,
-        as: 'cardSets',
-        foreignKey: {
-          name: 'white_card_id',
-          allowNull: false,
-          validate: {
-            notEmpty: true
+    classMethods: {
+      associate: (models) => {
+        models.WhiteCard.belongsToMany(models.CardSet, {
+          through: models.CardSetWhiteCard,
+          as: { singular: 'cardSet', plural: 'cardSets' },
+          foreignKey: {
+            name: 'white_card_id',
+            allowNull: false,
+            validate: {
+              notEmpty: true
+            }
           }
-        }
-      });
+        });
+      }
     }
   });
 };
