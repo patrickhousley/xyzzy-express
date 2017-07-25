@@ -1,2 +1,7 @@
-# xyzzy-express
-Remake of PretendYoureXyzzy repo using ExpressJS, Sequelize, and Angular.
+# xyzzy2
+Remake of PretendYoureXyzzy using:
+
+- Typescript
+- ExpressJS
+- TypeORM
+- InversifyJS

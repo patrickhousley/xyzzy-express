@@ -1,0 +1,1 @@
+This directory is meant to house private configurations that should not be pushed to the repository. For example, an Auth0 secrect key or encryption certificats.
