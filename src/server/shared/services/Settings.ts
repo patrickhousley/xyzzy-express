@@ -1,7 +1,7 @@
 import * as process from 'process';
 import * as winston from 'winston';
 import { injectable } from 'inversify';
-import { SettingsServiceAttributes } from 'src/server/services/Settings.interface';
+import { SettingsServiceAttributes } from 'src/server/shared/services/Settings.interface';
 
 @injectable()
 export class SettingsService implements SettingsServiceAttributes {

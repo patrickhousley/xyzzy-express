@@ -2,8 +2,8 @@ import * as process from 'process';
 import * as winston from 'winston';
 import { Container } from 'inversify';
 import { registry } from 'src/server/registry';
-import { SettingsService } from 'src/server/services/Settings';
-import { SettingsServiceAttributes } from 'src/server/services/Settings.interface';
+import { SettingsService } from 'src/server/shared/services/Settings';
+import { SettingsServiceAttributes } from 'src/server/shared/services/Settings.interface';
 
 describe('SERVER SERVICES: SettingsService', () => {
   let container: Container;
@@ -14,12 +14,6 @@ describe('SERVER SERVICES: SettingsService', () => {
     delete process.env.LOG_LEVEL;
     delete process.env.DATABASE_URL;
     delete process.env.PORT;
-    delete process.env.AUTH0_DOMAIN;
-    delete process.env.AUTH0_CLIENT_ID;
-    delete process.env.AUTH0_CLIENT_SECRET;
-    delete process.env.AWS_REGION;
-    delete process.env.SQS_SEND_MESSAGE_QUEUE_URL;
-    delete process.env.SQS_SEND_MESSAGE_FAILED_QUEUE_URL;
 
     container = new Container();
     container

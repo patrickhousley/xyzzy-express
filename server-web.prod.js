@@ -21,5 +21,5 @@ if(cluster.isMaster) {
   });
 } else {
   const app = require('./dist/server-web');
-  app.init();
+  app.init().catch(error => console.log(error));
 }

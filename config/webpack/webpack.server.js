@@ -18,7 +18,7 @@ module.exports = webpackMerge.smart(commonConfig, {
   target: 'node',
   externals: [nodeExternals()],
   entry: {
-		'server-web': './src/server/server-web.prod.ts'
+		'server-web': './src/server/express/server.prod.ts'
 	},
   output: {
     filename: '[name].js',

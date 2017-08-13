@@ -1,10 +1,7 @@
-import { interfaces, injectable, Container } from 'inversify';
-import { ConnectionOptions, Connection } from 'typeorm';
-import { conectionProvider } from 'src/server/orm/db/connection.provider';
+import { Container, interfaces } from 'inversify';
+import { connectionProvider } from 'src/server/orm/db/connection.provider';
 import { registry } from 'src/server/orm/registry';
-
-@injectable()
-class MockEntity {}
+import { Connection, ConnectionOptions } from 'typeorm';
 
 describe('SERVER ORM: ORMConnectionProvider', () => {
   let container: Container;
@@ -20,11 +17,8 @@ describe('SERVER ORM: ORMConnectionProvider', () => {
         database: ':memory:'
       });
     container
-      .bind<interfaces.Newable<MockEntity>>(registry.ORMEntity)
-      .toConstructor(MockEntity);
-    container
       .bind<interfaces.Provider<Connection>>(registry.ORMConnectionProvider)
-      .toProvider<Connection>(conectionProvider);
+      .toProvider<Connection>(connectionProvider);
     connection = (await container.get<interfaces.Provider<Connection>>(
       registry.ORMConnectionProvider
     )()) as Connection;

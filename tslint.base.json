@@ -66,7 +66,8 @@
     "quotemark": {
       "options": [
         "single",
-        "jsx-double"
+        "jsx-double",
+        "avoid-escape"
       ]
     },
     "trailing-comma": {

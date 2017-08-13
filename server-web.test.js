@@ -21,5 +21,5 @@ require('tsconfig-paths').register({
   paths: require(projectPath).compilerOptions.paths
 });
 
-const app = require('./src/server/server-web.test');
-app.init();
+const app = require('./src/server/express/server.test');
+app.init().catch(error => console.log(error));

@@ -1,6 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { CardAttributes, CardSetAttributes } from 'src/shared/entities';
 import { CardSet } from 'src/server/orm/entities/CardSet';
+import { CardAttributes, CardSetAttributes } from 'src/shared/entities';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryGeneratedColumn
+  } from 'typeorm';
 
 @Entity()
 export class WhiteCard implements CardAttributes {

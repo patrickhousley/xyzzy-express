@@ -1,8 +1,7 @@
 import { CardSetAttributes } from 'src/shared/entities/CardSet.interface';
 
 export enum CardSetGetErrorCode {
-  ORM_SERVER_ERROR = 'ORM_SERVER_ERROR',
-  DB_SERVER_ERROR = 'DB_SERVER_ERROR'
+  DBError = 'DBError'
 }
 
 export interface CardSetGetResponse {
@@ -10,6 +9,6 @@ export interface CardSetGetResponse {
   cardSets: CardSetAttributes[];
 
   // Failure response
-  errorCode?: CardSetGetErrorCode;
-  errorMessage?: string;
+  name?: CardSetGetErrorCode;
+  message?: string;
 }

@@ -6,9 +6,16 @@ import * as express from 'express';
 import * as winston from 'winston';
 import { interfaces } from 'inversify';
 import { Connection, ConnectionOptions } from 'typeorm';
-import { container } from 'src/server/web-container';
+import { expressWebAppProdFactory } from 'src/server/express/factories/express-prod';
 import { registry } from 'src/server/registry';
-import { SettingsServiceAttributes } from 'src/server/services/Settings.interface';
+import { SettingsServiceAttributes } from 'src/server/shared/services/Settings.interface';
+import { Container } from 'inversify';
+import { module as expressModule } from 'src/server/express/module';
+import { module as sharedModule } from 'src/server/shared/module';
+import { module as ormModule } from 'src/server/orm/module';
+
+const container = new Container();
+container.load(sharedModule, ormModule, expressModule);
 
 /** ORM DB Connection */
 const connectionOptions: ConnectionOptions = container.getTagged<
@@ -28,17 +35,6 @@ const connectionProvider: interfaces.Provider<Connection> = container.get<
 >(registry.ORMConnectionProvider);
 
 /** Express Web App */
-import { expressBaseWebConfigFactory } from 'src/server/express/base-web-config';
-container
-  .bind<interfaces.Factory<express.Application>>(registry.BaseExpressConfig)
-  .toFactory(expressBaseWebConfigFactory);
-import { expressBaseWebErrorConfigFactory } from 'src/server/express/base-web-error-config';
-container
-  .bind<interfaces.Factory<express.Application>>(
-    registry.BaseExpressErrorConfig
-  )
-  .toFactory(expressBaseWebErrorConfigFactory);
-import { expressWebAppProdFactory } from 'src/server/express/web-prod';
 container
   .bind<interfaces.Factory<express.Application>>(registry.ExpressApp)
   .toFactory(expressWebAppProdFactory);

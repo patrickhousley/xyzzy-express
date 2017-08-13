@@ -126,6 +126,9 @@ module.exports = webpackMerge.smart(commonConfig, {
           },
           {
             loader: 'angular-router-loader'
+          },
+          {
+            loader: 'angular2-template-loader'
           }
         ]
       },
@@ -139,14 +142,6 @@ module.exports = webpackMerge.smart(commonConfig, {
         ]
       }
     ]
-  },
-  node: {
-    global: true,
-    crypto: 'empty',
-    __dirname: true,
-    __filename: true,
-    process: true,
-    Buffer: false
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
