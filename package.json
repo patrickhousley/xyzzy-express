@@ -2,6 +2,7 @@
   "name": "xyzzy2",
   "version": "0.0.1",
   "private": true,
+  "license": "CC-BY-NC-SA-2.0",
   "description": "Web and API repository for the Xyzzy2 project.",
   "author": "Patrick Housley <patrick.f.housley@gmail.com>",
   "repository": {
@@ -29,6 +30,7 @@
     "@angular/cdk": "2.0.0-beta.8",
     "@angular/common": "4.3.1",
     "@angular/core": "4.3.1",
+    "@angular/flex-layout": "^2.0.0-beta.8",
     "@angular/forms": "4.3.1",
     "@angular/http": "4.3.1",
     "@angular/material": "2.0.0-beta.8",

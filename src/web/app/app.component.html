@@ -1,1 +1,26 @@
-<router-outlet></router-outlet>
+<md-sidenav-container fullscreen>
+  <md-sidenav #sidenav mode="over">
+    <md-toolbar>
+      <span>First Row</span>
+      <md-toolbar-row>
+        <span>Second Row</span>
+      </md-toolbar-row>
+      <md-toolbar-row>
+        <span>Third Row</span>
+      </md-toolbar-row>
+    </md-toolbar>
+  </md-sidenav>
+  <md-toolbar color="primary">
+    <button md-button (click)="sidenav.toggle()" *ngIf="enableSideNav$ | async">
+        <md-icon>menu</md-icon>
+      </button>
+    <span class="xyzzy2-app--title">Xyzzy 2</span>
+    <nav class="xyzzy2-app--nav" *ngIf="enableSideNav$ && (enableSideNav$ | async) === false">
+      <a md-button routerLink="/home" routerLinkActive="mat-accent">Play</a>
+      <a md-button routerLink="/about" routerLinkActive="mat-accent">About</a>
+    </nav>
+  </md-toolbar>
+  <main class="xyzzy2-app--content">
+    <router-outlet></router-outlet>
+  </main>
+</md-sidenav-container>
