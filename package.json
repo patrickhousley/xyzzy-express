@@ -93,11 +93,13 @@
     "node-sass": "4.5.3",
     "nodemon": "1.11.0",
     "postcss-loader": "2.0.6",
+    "prettier": "^1.5.3",
     "raw-loader": "0.5.1",
     "sass-loader": "6.0.6",
     "sqlite3": "3.1.8",
     "stats-webpack-plugin": "0.6.1",
     "style-loader": "0.18.2",
+    "stylefmt": "^6.0.0",
     "stylelint": "8.0.0",
     "stylelint-config-standard": "17.0.0",
     "supertest": "3.0.0",
@@ -113,6 +115,7 @@
   },
   "lint-staged": {
     "src/**/*.ts": [
+      "prettier --parser typescript --single-quote --write",
       "tslint --type-check --project tsconfig.json",
       "jest --findRelatedTests",
       "git add"
