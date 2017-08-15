@@ -12,7 +12,7 @@ import {
 import { AppComponent } from 'src/web/app/app.component';
 
 @Component({
-  selector: 'xyzzy-test-component',
+  selector: 'xyzzy2-test-component',
   template: '<div id="testComponent">test</div>'
 })
 class TestHostComponent {}
