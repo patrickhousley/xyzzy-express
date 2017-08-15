@@ -1,26 +1,33 @@
+<!-- <md-toolbar color="primary">
+  <button md-button (click)="sidenav.toggle()" *ngIf="enableSideNav$ | async">
+      <md-icon>menu</md-icon>
+    </button>
+  <span class="xyzzy2-app--title">Xyzzy 2</span>
+  <nav class="xyzzy2-app--nav" *ngIf="enableSideNav$ && (enableSideNav$ | async) === false">
+    <a md-button routerLink="/lobby" routerLinkActive="mat-accent">Lobby</a>
+    <a md-button routerLink="/about" routerLinkActive="mat-accent">About</a>
+  </nav>
+</md-toolbar>
 <md-sidenav-container fullscreen>
-  <md-sidenav #sidenav mode="over">
-    <md-toolbar>
-      <span>First Row</span>
-      <md-toolbar-row>
-        <span>Second Row</span>
-      </md-toolbar-row>
-      <md-toolbar-row>
-        <span>Third Row</span>
-      </md-toolbar-row>
-    </md-toolbar>
+  <md-sidenav mode="side" opened="true" >
+    <a md-button routerLink="/lobby" routerLinkActive="mat-accent">Lobby</a>
   </md-sidenav>
-  <md-toolbar color="primary">
-    <button md-button (click)="sidenav.toggle()" *ngIf="enableSideNav$ | async">
-        <md-icon>menu</md-icon>
-      </button>
-    <span class="xyzzy2-app--title">Xyzzy 2</span>
-    <nav class="xyzzy2-app--nav" *ngIf="enableSideNav$ && (enableSideNav$ | async) === false">
-      <a md-button routerLink="/home" routerLinkActive="mat-accent">Play</a>
-      <a md-button routerLink="/about" routerLinkActive="mat-accent">About</a>
-    </nav>
-  </md-toolbar>
   <main class="xyzzy2-app--content">
+    <router-outlet></router-outlet>
+  </main>
+</md-sidenav-container> -->
+
+<md-toolbar class="xyzzy2-app--header mat-elevation-z6" color="primary">
+  <button md-button (click)="sidenav.toggle()" *ngIf="(collapseSideNav$ | async) === true">
+    <md-icon>menu</md-icon>
+  </button>
+  <span class="xyzzy2-app--header__title">Xyzzy 2</span>
+</md-toolbar>
+<md-sidenav-container class="xyzzy2-app--container">
+  <md-sidenav #sidenav class="xyzzy2-app--container__sidenav" [opened]="(collapseSideNav$ | async) === true ? (openSidenave$ | async) : true" [mode]="(collapseSideNav$ | async) === true ? 'over' : 'side'">
+    
+  </md-sidenav>
+  <main class="xyzzy2-app--container__content">
     <router-outlet></router-outlet>
   </main>
 </md-sidenav-container>

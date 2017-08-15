@@ -11,7 +11,11 @@ html {
   font-family: 'Playfair Display', GillSans, Calibri, Trebuchet, sans-serif;
 }
 
-body {
-  padding: 0;
+html,
+body,
+.xyzzy2-app {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
 }

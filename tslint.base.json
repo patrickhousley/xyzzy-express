@@ -149,7 +149,7 @@
       "options":[
         "element",
         [
-          "xyzzy"
+          "xyzzy2"
         ],
         "kebab-case"
       ]
@@ -163,7 +163,7 @@
       "options":[
         "attribute",
         [
-          "xyzzy"
+          "xyzzy2"
         ],
         "camelCase"
       ]
