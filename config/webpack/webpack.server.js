@@ -2,17 +2,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const commonConfig = require('./webpack.common');
 const nodeExternals = require('webpack-node-externals');
 const path = require('path');
-const StatsPlugin = require('stats-webpack-plugin');
+const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const webpackMerge = require('webpack-merge');
-
-const environment = process.env.NODE_ENV || 'development';
-const extraPlugins = [];
-
-if (environment !== 'production') {
-  extraPlugins.push(
-    new StatsPlugin('server-stats.json', 'verbose')
-  );
-}
 
 module.exports = webpackMerge.smart(commonConfig, {
   target: 'node',
@@ -48,8 +39,12 @@ module.exports = webpackMerge.smart(commonConfig, {
     Buffer: true
   },
   plugins: [
+    new StatsWriterPlugin({
+      filename: 'server-stats.json',
+      fields: null
+    }),
     new CleanWebpackPlugin(['dist'], {
       root: path.resolve(__dirname, '..', '..')
     })
-  ].concat(extraPlugins)
+  ]
 });

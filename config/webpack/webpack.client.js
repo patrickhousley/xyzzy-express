@@ -6,7 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ngtools = require('@ngtools/webpack');
 const path = require('path');
 const postCssOptions = require('./post-css-options');
-const StatsPlugin = require('stats-webpack-plugin');
+const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
+const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 
@@ -41,6 +42,10 @@ if (environment === 'production') {
       ],
       skipCodeGeneration: false
     }),
+    // Purify plugin must come before the uglify plugin
+    new PurifyPlugin({
+
+    }),
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       output: {
@@ -64,7 +69,9 @@ if (environment === 'production') {
         if_return: true,
         join_vars: true,
         drop_console: true,
-        drop_debugger: true
+        drop_debugger: true,
+        pure_getters: true,
+        passes: 3
       }
     }),
     new webpack.optimize.CommonsChunkPlugin({
@@ -85,7 +92,6 @@ if (environment === 'production') {
       ],
       minChunks: 2
     }),
-    new StatsPlugin('../client-stats.json', 'verbose'),
     // Specify the correct order the scripts will be injected in
     new webpack.optimize.CommonsChunkPlugin({
       name: ['polyfills', 'vendors'].reverse()
@@ -112,7 +118,6 @@ if (environment === 'production') {
     }
   );
   extraPlugins.push(
-    new StatsPlugin('../client-stats.json', 'verbose'),
     // Specify the correct order the scripts will be injected in
     new webpack.optimize.CommonsChunkPlugin({
       name: ['polyfills', 'vendors'].reverse()
@@ -192,6 +197,10 @@ module.exports = webpackMerge.smart(commonConfig, {
     setImmediate: false
   },
   plugins: [
+    new StatsWriterPlugin({
+      filename: '../client-stats.json',
+      fields: null
+    }),
     new CircularDependencyPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
