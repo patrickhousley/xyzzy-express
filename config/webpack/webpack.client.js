@@ -1,4 +1,5 @@
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const commonConfig = require('./webpack.common');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -10,10 +11,36 @@ const webpack = require('webpack');
 const webpackMerge = require('webpack-merge');
 
 const environment = process.env.NODE_ENV || 'development';
+const extraRules = [];
 const extraPlugins = [];
 
 if (environment === 'production') {
+  extraRules.push(
+    {
+      test: /\.ts$/,
+      exclude: [
+        /\.(spec|e2e)\.ts$/
+      ],
+      use: [
+        {
+          loader: '@ngtools/webpack'
+        }
+      ]
+    },
+    {
+      test: /\.js$/,
+      loader: '@angular-devkit/build-optimizer/webpack-loader'
+    }
+  );
+
   extraPlugins.push(
+    new ngtools.AotPlugin({
+      tsConfigPath: path.join(__dirname, '..', '..', 'tsconfig.json'),
+      exclude: [
+        '**/*.spec.ts'
+      ],
+      skipCodeGeneration: false
+    }),
     new webpack.optimize.UglifyJsPlugin({
       beautify: false,
       output: {
@@ -65,6 +92,25 @@ if (environment === 'production') {
     })
   );
 } else {
+  extraRules.push(
+    {
+      test: /\.ts$/,
+      exclude: [
+        /\.(spec|e2e)\.ts$/
+      ],
+      use: [
+        {
+          loader: 'awesome-typescript-loader'
+        },
+        {
+          loader: 'angular-router-loader'
+        },
+        {
+          loader: 'angular2-template-loader'
+        }
+      ]
+    }
+  );
   extraPlugins.push(
     new StatsPlugin('../client-stats.json', 'verbose'),
     // Specify the correct order the scripts will be injected in
@@ -87,12 +133,16 @@ module.exports = webpackMerge.smart(commonConfig, {
   module: {
     rules: [
       {
+        enforce: 'pre',
+        test: /\.js$/,
+        exclude: [
+          /node_modules/
+        ],
+        loader: 'source-map-loader'
+      },
+      {
         test: /\.html$/,
-        use: [
-          {
-            loader: 'html-loader'
-          }
-        ]
+        loader: 'html-loader'
       },
       {
         test: /\.css$/,
@@ -122,28 +172,27 @@ module.exports = webpackMerge.smart(commonConfig, {
         ]
       },
       {
-        test: /\.ts$/,
-        exclude: [
-          /\.(spec|e2e)\.ts$/
-        ],
-        use: [
-          {
-            loader: '@ngtools/webpack'
-          }
-        ]
-      },
-      {
         test: /src[\\|\/]web[\\|\/]styles.scss$/,
         enforce: 'post',
-        use: [
-          {
-            loader: 'style-loader'
-          }
-        ]
+        loader: 'style-loader'
       }
-    ]
+    ].concat(extraRules)
+  },
+  node: {
+    fs: 'empty',
+    // `global` should be kept true, removing it resulted in a
+    // massive size increase with Build Optimizer on AIO.
+    global: true,
+    crypto: 'empty',
+    tls: 'empty',
+    net: 'empty',
+    process: true,
+    module: false,
+    clearImmediate: false,
+    setImmediate: false
   },
   plugins: [
+    new CircularDependencyPlugin(),
     new webpack.LoaderOptionsPlugin({
       options: {
         htmlLoader: {
@@ -175,13 +224,6 @@ module.exports = webpackMerge.smart(commonConfig, {
         to: path.resolve(__dirname, '..', '..', 'dist', 'client', 'assets')
       }
     ]),
-    new ngtools.AotPlugin({
-      tsConfigPath: path.join(__dirname, '..', '..', 'tsconfig.json'),
-      exclude: [
-        '**/*.spec.ts'
-      ],
-      skipCodeGeneration: environment === 'development'
-    }),
     new CleanWebpackPlugin(['dist'], {
       root: path.resolve(__dirname, '..', '..')
     })
