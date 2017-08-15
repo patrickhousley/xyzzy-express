@@ -7,7 +7,7 @@ import * as webpack from 'webpack';
 import * as webpackMiddleware from 'webpack-dev-middleware';
 
 /* tslint:disable:no-require-imports no-var-requires typedef */
-const webpackDevConfig = require('src/../config/webpack/webpack.dev');
+const webpackDevConfig = require('src/../config/webpack/webpack.client');
 const historyApiFallback = require('connect-history-api-fallback');
 /* tslint:enable:no-require-imports no-var-requires typedef */
 

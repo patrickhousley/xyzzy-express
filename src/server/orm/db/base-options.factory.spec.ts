@@ -21,18 +21,18 @@ describe('SERVER ORM: ORMBaseConnectionOptionsFactory', () => {
     expect(factory()).toBeDefined();
   });
 
-  it('should set autoSchemaSync to false', () => {
+  it('should set synchronize to false', () => {
     const factory = container.getTagged<interfaces.Factory<ConnectionOptions>>(registry.ORMConnectionOptionsFactory, 'type', registry.ORMBaseConnectionOptionsFactory);
     const options: ConnectionOptions = factory() as ConnectionOptions;
-    expect(options.autoSchemaSync).toBeDefined();
-    expect(options.autoSchemaSync).toBeFalsy();
+    expect(options.synchronize).toBeDefined();
+    expect(options.synchronize).toBeFalsy();
   });
 
-  it('should override autoSchemaSync to true', () => {
+  it('should override synchronize to true', () => {
     const factory = container.getTagged<interfaces.Factory<ConnectionOptions>>(registry.ORMConnectionOptionsFactory, 'type', registry.ORMBaseConnectionOptionsFactory);
-    const overrides: Partial<ConnectionOptions> = { autoSchemaSync: true };
+    const overrides: Partial<ConnectionOptions> = { synchronize: true };
     const options: ConnectionOptions = factory(overrides) as ConnectionOptions;
-    expect(options.autoSchemaSync).toBeDefined();
-    expect(options.autoSchemaSync).toBeTruthy();
+    expect(options.synchronize).toBeDefined();
+    expect(options.synchronize).toBeTruthy();
   });
 });
